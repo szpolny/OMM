@@ -1,3 +1,4 @@
+import { open } from '@tauri-apps/plugin-dialog';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,16 +20,17 @@ const WelcomePage = () => {
     const [gamePath, setGamePath] = useState("")
     const [error, setError] = useState("")
 
-    const handleDirectorySelect = async () => {
-        try {
-            const mockPath =
-                gameType === "steam"
-                    ? "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program"
-                    : "C:\\Games\\Kerbal Space Program"
-            setGamePath(mockPath)
-            setError("")
-        } catch (err) {
-            setError("Failed to select directory")
+    const handleDirectorySelect = async (installationType: "steam" | "other") => {
+        const file = await open({
+            directory: true,
+            multiple: false,
+            canCreateDirectories: false,
+            title: "Select your Kerbal Space Program installation folder",
+            defaultPath: installationType === "steam" ? "C:\\Program Files (x86)\\Steam\\steamapps\\common" : "C:\\Games",
+        })
+
+        if (file) {
+            setGamePath(file);
         }
     }
 
@@ -247,7 +249,7 @@ const WelcomePage = () => {
                                     />
                                     <Button
                                         type="button"
-                                        onClick={handleDirectorySelect}
+                                        onClick={() => handleDirectorySelect(gameType)}
                                         className="bg-slate-800 hover:bg-slate-700 text-white border-slate-700 h-9"
                                         size="sm"
                                     >
