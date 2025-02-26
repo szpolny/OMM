@@ -13,7 +13,7 @@ pub fn run() {
             let initialized = store.get("initialized").and_then(|v| v.as_bool());
 
             if initialized == None {
-                store.set("initialized", json!(true));
+                store.set("initialized", json!(false));
             }
 
             Ok(())
