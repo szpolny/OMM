@@ -9,9 +9,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { Rocket, Folder, Clock, Activity, ArrowLeft, Info } from 'lucide-react';
 import { useState } from "react";
+import { exists } from '@tauri-apps/plugin-fs';
+import { platform } from '@tauri-apps/plugin-os';
+
+const currentPlatform = platform();
 
 type Step = "version" | "steam-api" | "directory";
-
 
 const WelcomePage = () => {
     const [step, setStep] = useState<Step>("version")
@@ -51,7 +54,35 @@ const WelcomePage = () => {
             setError("Please select your game directory")
             return
         }
-        // Here you would validate the game directory and proceed to the next step
+
+        // Check if there is KSP_x64.exe in the selected directory (windows)
+        if (currentPlatform === "windows") {
+            const kspExecutable = await exists(`${gamePath}\\KSP_x64.exe`);
+            if (!kspExecutable) {
+                setError("KSP_x64.exe not found in the selected directory")
+                return
+            }
+        }
+
+        // Check if there is KSP.app in the selected directory (macos)
+        if (currentPlatform === "macos") {
+            const kspExecutable = await exists(`${gamePath}/KSP.app`);
+            if (!kspExecutable) {
+                setError("KSP.app not found in the selected directory")
+                return
+            }
+        }
+
+        // Check if there is KSP.x86_64 in the selected directory (linux)
+        if (currentPlatform === "linux") {
+            const kspExecutable = await exists(`${gamePath}/KSP.x86_64`);
+            if (!kspExecutable) {
+                setError("KSP.x86_64 not found in the selected directory")
+                return
+            }
+        }
+
+        setError('');
     }
 
     const handleBack = () => {
