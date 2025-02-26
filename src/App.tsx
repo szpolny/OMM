@@ -1,12 +1,11 @@
-import "./globals.css";
+import "./App.css";
+import WelcomePage from "./routes/WelcomePage/WelcomePage";
 
 function App() {
   return (
-    <main className="w-screen h-screen flex items-center justify-center">
-      <p className="leading-7 [&:not(:first-child)]:mt-6">
-      Hello, world!
-    </p>
-    </main>
+    <div className="bg-gradient-to-b from-slate-900 to-slate-800 min-h-screen w-screen">
+      <WelcomePage />
+    </div>
   )
 }
 
