@@ -11,6 +11,8 @@ import { Rocket, Folder, Clock, Activity, ArrowLeft, Info } from 'lucide-react';
 import { useState } from "react";
 import { exists } from '@tauri-apps/plugin-fs';
 import { platform } from '@tauri-apps/plugin-os';
+import { getDataStore } from '@/utils/store';
+import useInitializedStore from '@/stores/useInitializedStore';
 
 const currentPlatform = platform();
 
@@ -22,6 +24,7 @@ const WelcomePage = () => {
     const [useSteamApi, setUseSteamApi] = useState(true)
     const [gamePath, setGamePath] = useState("")
     const [error, setError] = useState("")
+    const { setInitialized } = useInitializedStore();
 
     const handleDirectorySelect = async (installationType: "steam" | "other") => {
         const file = await open({
@@ -83,6 +86,19 @@ const WelcomePage = () => {
         }
 
         setError('');
+
+        // Save all data to the store
+        const store = await getDataStore();
+        await store.set("gameType", gameType);
+        if (gameType === "steam") {
+            await store.set("useSteamApi", useSteamApi);
+        }
+        await store.set("gamePath", gamePath);
+        await store.set("initialized", true);
+
+        await store.save();
+
+        setInitialized(true);
     }
 
     const handleBack = () => {
@@ -95,7 +111,7 @@ const WelcomePage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center">
             <Card className="w-full max-w-xl bg-slate-950/50 border-slate-800">
                 <CardHeader className="text-center space-y-3 pb-3">
                     <div className="flex justify-center">

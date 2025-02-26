@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
-import { Store } from "@tauri-apps/plugin-store";
 import { LoaderCircle } from "lucide-react";
-import WelcomePage from "./routes/WelcomePage/WelcomePage";
+import WelcomePage from "./views/WelcomePage/WelcomePage";
 import "./App.css";
+import Dashboard from "./views/Dashboard/Dashboard";
+import { getDataStore } from "./utils/store";
+import useInitializedStore from "./stores/useInitializedStore";
 
-// Types
-interface AppState {
-  loading: boolean;
-  initialized: boolean | null;
-}
-
-interface InitializedData {
-  value: boolean;
-}
 
 // Loading component
 const LoadingSpinner = () => (
@@ -23,36 +16,24 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// Data store utilities
-const getDataStore = async (): Promise<Store> => {
-  return await Store.load("data.json");
-};
-
-const isInitialized = async (): Promise<InitializedData> => {
+const isInitialized = async (): Promise<boolean> => {
   const dataStore = await getDataStore();
-  return (await dataStore.get<InitializedData>("initialized")) || { value: false };
+  return (await dataStore.get<boolean>("initialized")) || false;
 };
 
 function App() {
-  const [state, setState] = useState<AppState>({
-    loading: true,
-    initialized: null,
-  });
+  const { loading, initialized, setLoading, setInitialized } = useInitializedStore();
 
   useEffect(() => {
     const checkInitialization = async () => {
       try {
         const initialized = await isInitialized();
-        setState({
-          loading: false,
-          initialized: initialized.value,
-        });
+        setLoading(false);
+        setInitialized(initialized);
       } catch (error) {
         console.error("Failed to check initialization status:", error);
-        setState({
-          loading: false,
-          initialized: false,
-        });
+        setLoading(false);
+        setInitialized(false);
       }
     };
 
@@ -60,16 +41,16 @@ function App() {
   }, []);
 
   const renderContent = () => {
-    if (state.loading) {
+    if (loading) {
       return <LoadingSpinner />;
     }
 
-    if (!state.initialized) {
+    if (!initialized) {
       return <WelcomePage />;
     }
 
     // Here will be mod manager dashboard
-    return <div>Dashboard</div>;
+    return <Dashboard />;
   };
 
   return (
