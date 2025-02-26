@@ -1,3 +1,4 @@
+use serde_json::json;
 use std::sync::Mutex;
 use tauri_plugin_store::StoreExt;
 
@@ -12,7 +13,7 @@ pub fn run() {
             let initialized = store.get("initialized").and_then(|v| v.as_bool());
 
             if initialized == None {
-                store.set("initialized", true);
+                store.set("initialized", json!(true));
             }
 
             Ok(())
