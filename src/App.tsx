@@ -5,6 +5,7 @@ import "./App.css";
 import Dashboard from "./views/Dashboard/Dashboard";
 import { getDataStore } from "./utils/store";
 import useInitializedStore from "./stores/useInitializedStore";
+import { invoke } from "@tauri-apps/api/core";
 
 
 // Loading component

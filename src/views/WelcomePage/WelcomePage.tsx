@@ -7,16 +7,18 @@ import { Label } from "@/components/ui/label";
 import { FaSteam } from "react-icons/fa";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
-import { Rocket, Folder, Clock, Activity, ArrowLeft, Info } from 'lucide-react';
+import { Rocket, Folder, Clock, Activity, ArrowLeft, Info, Library } from 'lucide-react';
 import { useState } from "react";
 import { exists } from '@tauri-apps/plugin-fs';
 import { platform } from '@tauri-apps/plugin-os';
 import { getDataStore } from '@/utils/store';
 import useInitializedStore from '@/stores/useInitializedStore';
+import { invoke } from '@tauri-apps/api/core';
+import { commands } from '@/bindings';
 
 const currentPlatform = platform();
 
-type Step = "version" | "steam-api" | "directory";
+type Step = "version" | "steam-api" | "directory" | "library";
 
 const WelcomePage = () => {
     const [step, setStep] = useState<Step>("version")
@@ -25,6 +27,7 @@ const WelcomePage = () => {
     const [gamePath, setGamePath] = useState("")
     const [error, setError] = useState("")
     const { setInitialized } = useInitializedStore();
+    const [libraryPath, setLibraryPath] = useState('');
 
     const handleDirectorySelect = async (installationType: "steam" | "other") => {
         const file = await open({
@@ -32,12 +35,31 @@ const WelcomePage = () => {
             multiple: false,
             canCreateDirectories: false,
             title: "Select your Kerbal Space Program installation folder",
-            defaultPath: installationType === "steam" ? "C:\\Program Files (x86)\\Steam\\steamapps\\common" : "C:\\Games",
+            defaultPath: gamePath,
         })
 
         if (file) {
             setGamePath(file);
         }
+
+        setError("");
+    }
+
+    const handleLibrarySelect = async () => {
+        const file = await open({
+            directory: true,
+            multiple: false,
+            canCreateDirectories: true,
+            title: "Select your profiles library folder",
+            defaultPath: libraryPath
+        });
+
+        if (file) {
+            setLibraryPath(file);
+        }
+
+        setError("")
+
     }
 
     const handleVersionContinue = () => {
@@ -49,7 +71,13 @@ const WelcomePage = () => {
     }
 
     const handleSteamApiContinue = () => {
-        setStep("directory")
+        commands.determineSteamGameLocation().then((gamePath) => {
+            if (gamePath) {
+                setGamePath(gamePath);
+            }
+
+            setStep("directory");
+        });
     }
 
     const handleDirectoryContinue = async () => {
@@ -87,6 +115,19 @@ const WelcomePage = () => {
 
         setError('');
 
+        setStep("library");
+
+
+    }
+
+    const handleLibraryContinue = async () => {
+        if (!libraryPath) {
+            setError("Please select your profiles library folder")
+            return
+        }
+
+        setError("");
+
         // Save all data to the store
         const store = await getDataStore();
         await store.set("gameType", gameType);
@@ -95,6 +136,7 @@ const WelcomePage = () => {
         }
         await store.set("gamePath", gamePath);
         await store.set("initialized", true);
+        await store.set("defaultLibraryPath", libraryPath);
 
         await store.save();
 
@@ -106,7 +148,10 @@ const WelcomePage = () => {
             setStep("version")
         } else if (step === "directory") {
             setStep(gameType === "steam" ? "steam-api" : "version")
+        } else if (step === "library") {
+            setStep("directory")
         }
+
         setError("")
     }
 
@@ -139,6 +184,12 @@ const WelcomePage = () => {
                                 )}
                             />
                         )}
+                        <div
+                            className={cn(
+                                "h-1.5 w-1.5 rounded-full transition-colors duration-300",
+                                step === "version" || step === "steam-api" || step === "directory" ? "bg-slate-600" : "bg-blue-500",
+                            )}
+                        />
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -256,7 +307,7 @@ const WelcomePage = () => {
                                 </Button>
                             </div>
                         </div>
-                    ) : (
+                    ) : step === "directory" ? (
                         <div className="space-y-4">
                             <div className="space-y-2">
                                 <Label className="text-white text-base">
@@ -323,6 +374,75 @@ const WelcomePage = () => {
                                 </Button>
                                 <Button
                                     onClick={handleDirectoryContinue}
+                                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                                    size="sm"
+                                >
+                                    Continue
+                                    <Rocket className="ml-2 h-3.5 w-3.5" />
+                                </Button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label className="text-white text-base">Profiles Library Location</Label>
+                                <CardDescription className="text-slate-400 text-sm pb-1">
+                                    Choose where to store your mod profiles and mods
+                                </CardDescription>
+                                <div className="flex items-center gap-2 p-2 rounded-md bg-slate-900/50 border border-slate-800">
+                                    <Library className="h-4 w-4 text-blue-500 shrink-0" />
+                                    <div className="text-white text-sm">
+                                        Your profiles library will be default place to store your mod profiles
+                                    </div>
+                                </div>
+                                <div className="grid gap-2 text-xs text-slate-400 px-2">
+                                    <div className="flex items-start gap-1">
+                                        <span className="select-none">•</span>
+                                        <span>Each profile can have different mods, configurations and saves</span>
+                                    </div>
+                                    <div className="flex items-start gap-1">
+                                        <span className="select-none">•</span>
+                                        <span>Your mod profiles can consume significant disk space, so while choosing location, keep it in mind</span>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2 pt-1">
+                                    <Input
+                                        id="library-path"
+                                        value={libraryPath}
+                                        onChange={(e) => setLibraryPath(e.target.value)}
+                                        placeholder="Select profiles library folder"
+                                        className="bg-slate-900 border-slate-800 text-white text-sm h-9"
+                                        readOnly
+                                    />
+                                    <Button
+                                        type="button"
+                                        onClick={handleLibrarySelect}
+                                        className="bg-slate-800 hover:bg-slate-700 text-white border-slate-700 h-9"
+                                        size="sm"
+                                    >
+                                        <Folder className="mr-2 h-3.5 w-3.5" />
+                                        Browse
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {error && (
+                                <Alert variant="destructive" className="bg-red-900/50 border-red-800 py-1.5">
+                                    <AlertDescription className="text-xs">{error}</AlertDescription>
+                                </Alert>
+                            )}
+
+                            <div className="flex gap-2">
+                                <Button
+                                    onClick={handleBack}
+                                    className="bg-slate-800 hover:bg-slate-700 text-white border-slate-700"
+                                    size="sm"
+                                >
+                                    <ArrowLeft className="mr-2 h-3.5 w-3.5" />
+                                    Back
+                                </Button>
+                                <Button
+                                    onClick={handleLibraryContinue}
                                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                                     size="sm"
                                 >
