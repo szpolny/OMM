@@ -1,11 +1,11 @@
-import Sidebar from "./Sidebar";
+import Sidebar from './Sidebar';
 
 const Dashboard = () => {
-    return (
-        <main>
-            <Sidebar />
-        </main>
-    );
+  return (
+    <main>
+      <Sidebar />
+    </main>
+  );
 };
 
 export default Dashboard;

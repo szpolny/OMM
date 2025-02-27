@@ -31,7 +31,7 @@ import {
 import * as TAURI_API_EVENT from "@tauri-apps/api/event";
 import { type WebviewWindow as __WebviewWindow__ } from "@tauri-apps/api/webviewWindow";
 
-type __EventObj__<T> = {
+interface __EventObj__<T> {
 	listen: (
 		cb: TAURI_API_EVENT.EventCallback<T>,
 	) => ReturnType<typeof TAURI_API_EVENT.listen<T>>;
@@ -41,7 +41,7 @@ type __EventObj__<T> = {
 	emit: null extends T
 		? (payload?: T) => ReturnType<typeof TAURI_API_EVENT.emit>
 		: (payload: T) => ReturnType<typeof TAURI_API_EVENT.emit>;
-};
+}
 
 export type Result<T, E> =
 	| { status: "ok"; data: T }
@@ -52,9 +52,7 @@ function __makeEvents__<T extends Record<string, any>>(
 ) {
 	return new Proxy(
 		{} as unknown as {
-			[K in keyof T]: __EventObj__<T[K]> & {
-				(handle: __WebviewWindow__): __EventObj__<T[K]>;
-			};
+			[K in keyof T]: __EventObj__<T[K]> & ((handle: __WebviewWindow__) => __EventObj__<T[K]>);
 		},
 		{
 			get: (_, event) => {

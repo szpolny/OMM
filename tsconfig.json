@@ -14,17 +14,20 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    "checkJs": true,
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
 
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "eslint.config.mjs"],
+  "references": [{ "path": "./tsconfig.node.json" }],
 }
