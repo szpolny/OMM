@@ -23,7 +23,12 @@ pub fn run() {
     // Generate TypeScript bindings in debug mode
     #[cfg(debug_assertions)]
     specta_builder
-        .export(Typescript::default(), "../src/bindings.ts")
+        .export(
+            Typescript::default()
+                .formatter(specta_typescript::formatter::eslint)
+                .header("// @ts-nocheck"),
+            "../src/bindings.ts",
+        )
         .expect("Failed to export typescript bindings");
 
     // Build and run the Tauri application
