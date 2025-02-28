@@ -6,8 +6,36 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Plus, Rocket } from 'lucide-react';
+import ProfileCard from './ProfileCard';
+import { useState } from 'react';
+
+type ProfileType = {
+  id: number;
+  name: string;
+  location: string;
+  locked: boolean;
+};
 
 const Sidebar = () => {
+  // Mock data
+  const profiles: ProfileType[] = [
+    {
+      id: 0,
+      name: 'Default (Vanilla)',
+      location:
+        'C:/Program Files (x86)/Steam/steamapps/common/Kerbal Space Program',
+      locked: true,
+    },
+    {
+      id: 1,
+      name: 'Modded',
+      location: 'dasdas',
+      locked: false,
+    },
+  ];
+
+  const [selectedProfile] = useState(0);
+
   return (
     <div className="flex w-52 flex-col border-r">
       <div className="flex h-16 items-center justify-center gap-2 border-b">
@@ -38,6 +66,15 @@ const Sidebar = () => {
             </Tooltip>
           </TooltipProvider>
         </div>
+        {profiles.map((profile) => (
+          <div key={profile.name} className="w-full px-2">
+            <ProfileCard
+              selected={profile.id === selectedProfile}
+              locked={profile.locked}
+              name={profile.name}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
