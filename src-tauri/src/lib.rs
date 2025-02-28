@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use serde_json::json;
 use specta_typescript::Typescript;
 use tauri_plugin_store::StoreExt;
@@ -6,8 +8,11 @@ use tauri_specta::{collect_commands, Builder};
 mod steam;
 
 pub fn run() {
-    let builder = Builder::<tauri::Wry>::new()
-        .commands(collect_commands![steam::determine_steam_game_location]);
+    let builder = Builder::<tauri::Wry>::new().commands(collect_commands![
+        steam::determine_steam_game_location,
+        log_message,
+        exists
+    ]);
 
     #[cfg(debug_assertions)] // <- Only export on non-release builds
     builder
@@ -33,8 +38,24 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            steam::determine_steam_game_location
+            steam::determine_steam_game_location,
+            log_message,
+            exists
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+#[tauri::command]
+#[specta::specta]
+fn log_message(message: String) {
+    println!("{}", message);
+}
+
+#[tauri::command]
+#[specta::specta]
+fn exists(path: String) -> bool {
+    let file = Path::new(&path).exists();
+
+    file
 }

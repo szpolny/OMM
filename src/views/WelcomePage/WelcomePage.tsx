@@ -23,7 +23,6 @@ import {
   Library,
 } from 'lucide-react';
 import { useState } from 'react';
-import { exists } from '@tauri-apps/plugin-fs';
 import { platform } from '@tauri-apps/plugin-os';
 import { getDataStore } from '@/utils/store';
 import useInitializedStore from '@/stores/useInitializedStore';
@@ -100,27 +99,45 @@ const WelcomePage = () => {
 
     // Check if there is KSP_x64.exe in the selected directory (windows)
     if (currentPlatform === 'windows') {
-      const kspExecutable = await exists(`${gamePath}\\KSP_x64.exe`);
-      if (!kspExecutable) {
-        setError('KSP_x64.exe not found in the selected directory');
+      try {
+        const kspExecutable = await commands.exists(`${gamePath}\\KSP_x64.exe`);
+        if (!kspExecutable) {
+          setError('KSP_x64.exe not found in the selected directory');
+          return;
+        }
+      } catch (error) {
+        setError('Failed to check directory');
+        commands.logMessage(error as string);
         return;
       }
     }
 
     // Check if there is KSP.app in the selected directory (macos)
     if (currentPlatform === 'macos') {
-      const kspExecutable = await exists(`${gamePath}/KSP.app`);
-      if (!kspExecutable) {
-        setError('KSP.app not found in the selected directory');
+      try {
+        const kspExecutable = await commands.exists(`${gamePath}/KSP.app`);
+        if (!kspExecutable) {
+          setError('KSP.app not found in the selected directory');
+          return;
+        }
+      } catch (error) {
+        setError('Failed to check directory');
+        commands.logMessage(error as string);
         return;
       }
     }
 
     // Check if there is KSP.x86_64 in the selected directory (linux)
     if (currentPlatform === 'linux') {
-      const kspExecutable = await exists(`${gamePath}/KSP.x86_64`);
-      if (!kspExecutable) {
-        setError('KSP.x86_64 not found in the selected directory');
+      try {
+        const kspExecutable = await commands.exists(`${gamePath}/KSP.x86_64`);
+        if (!kspExecutable) {
+          setError('KSP.x86_64 not found in the selected directory');
+          return;
+        }
+      } catch (error) {
+        setError('Failed to check directory');
+        commands.logMessage(error as string);
         return;
       }
     }

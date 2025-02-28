@@ -83,7 +83,7 @@ pub fn determine_steam_game_location() -> Option<String> {
 
             for (appid, _value) in value.apps.unwrap().into_iter() {
                 if appid == "220200" {
-                    gamelocation = value.path + "\\common\\Kerbal Space Program";
+                    gamelocation = value.path + "\\steamapps\\common\\Kerbal Space Program";
                     return Some(gamelocation);
                 }
             }
