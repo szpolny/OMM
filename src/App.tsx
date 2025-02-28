@@ -6,7 +6,6 @@ import Dashboard from './views/Dashboard/Dashboard';
 import { getDataStore } from './utils/store';
 import useInitializedStore from './stores/useInitializedStore';
 
-// Loading component
 const LoadingSpinner = () => (
   <div className="flex h-full w-full items-center justify-center">
     <div className="animate-spin">
