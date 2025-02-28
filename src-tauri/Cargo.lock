@@ -2503,7 +2503,7 @@ dependencies = [
  "tauri-plugin-store",
  "tauri-specta",
  "tempfile",
- "windows 0.48.0",
+ "windows",
 ]
 
 [[package]]
@@ -3909,7 +3909,7 @@ dependencies = [
  "tao-macros",
  "unicode-segmentation",
  "url",
- "windows 0.60.0",
+ "windows",
  "windows-core 0.60.1",
  "windows-version",
  "x11-dl",
@@ -3980,7 +3980,7 @@ dependencies = [
  "webkit2gtk",
  "webview2-com",
  "window-vibrancy",
- "windows 0.60.0",
+ "windows",
 ]
 
 [[package]]
@@ -4122,7 +4122,7 @@ dependencies = [
  "tauri-plugin",
  "thiserror 2.0.11",
  "url",
- "windows 0.60.0",
+ "windows",
  "zbus",
 ]
 
@@ -4176,7 +4176,7 @@ dependencies = [
  "tauri-utils",
  "thiserror 2.0.11",
  "url",
- "windows 0.60.0",
+ "windows",
 ]
 
 [[package]]
@@ -4201,7 +4201,7 @@ dependencies = [
  "url",
  "webkit2gtk",
  "webview2-com",
- "windows 0.60.0",
+ "windows",
  "wry",
 ]
 
@@ -5038,7 +5038,7 @@ checksum = "b0d606f600e5272b514dbb66539dd068211cc20155be8d3958201b4b5bd79ed3"
 dependencies = [
  "webview2-com-macros",
  "webview2-com-sys",
- "windows 0.60.0",
+ "windows",
  "windows-core 0.60.1",
  "windows-implement",
  "windows-interface",
@@ -5062,7 +5062,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bfb27fccd3c27f68e9a6af1bcf48c2d82534b8675b83608a4d81446d095a17ac"
 dependencies = [
  "thiserror 2.0.11",
- "windows 0.60.0",
+ "windows",
  "windows-core 0.60.1",
 ]
 
@@ -5110,15 +5110,6 @@ dependencies = [
  "raw-window-handle",
  "windows-sys 0.59.0",
  "windows-version",
-]
-
-[[package]]
-name = "windows"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e686886bc078bc1b0b600cac0147aadb815089b6e4da64016cbd754b6342700f"
-dependencies = [
- "windows-targets 0.48.5",
 ]
 
 [[package]]
@@ -5571,7 +5562,7 @@ dependencies = [
  "webkit2gtk",
  "webkit2gtk-sys",
  "webview2-com",
- "windows 0.60.0",
+ "windows",
  "windows-core 0.60.1",
  "windows-version",
  "x11-dl",
