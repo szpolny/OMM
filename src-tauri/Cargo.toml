@@ -34,3 +34,6 @@ specta = "2.0.0-rc.21"
 
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.48", features = ["Win32_System_Registry", "Win32_Foundation"] }
+
+[dev-dependencies]
+tempfile = "3.17.1"
