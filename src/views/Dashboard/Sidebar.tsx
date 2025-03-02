@@ -1,13 +1,7 @@
-import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Plus, Rocket } from 'lucide-react';
+import { Rocket } from 'lucide-react';
 import ProfileCard from './ProfileCard';
 import { useState } from 'react';
+import CreateProfileDialog from './CreateProfileDialog';
 
 type ProfileType = {
   id: number;
@@ -36,6 +30,10 @@ const Sidebar = () => {
 
   const [selectedProfile] = useState(0);
 
+  const handleCreateProfile = () => {
+    // TODO: Implement profile creation
+  };
+
   return (
     <div className="flex w-52 flex-col border-r">
       <div className="flex h-16 items-center justify-center gap-2 border-b">
@@ -49,22 +47,7 @@ const Sidebar = () => {
           <h2 className="text-sm font-semibold text-muted-foreground">
             PROFILES
           </h2>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 text-muted-foreground hover:text-white"
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Create new profile</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <CreateProfileDialog onCreateProfile={handleCreateProfile} />
         </div>
         {profiles.map((profile) => (
           <div key={profile.name} className="w-full px-2">
