@@ -53,7 +53,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-b from-slate-900 to-slate-800">
+    <div className="min-h-screen w-screen bg-linear-to-b from-slate-900 to-slate-800">
       {renderContent()}
     </div>
   );
