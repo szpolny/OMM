@@ -28,7 +28,7 @@ export const VersionStep = ({
         <RadioGroupItem value="steam" id="steam" className="peer sr-only" />
         <Label
           htmlFor="steam"
-          className="flex cursor-pointer flex-col items-center justify-between rounded-md border-2 border-slate-800 bg-slate-900/50 p-3 hover:border-blue-600 hover:bg-slate-900 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500"
+          className="flex cursor-pointer flex-col items-center justify-between rounded-md border-2 border-slate-800 bg-slate-900/50 p-3 peer-data-[state=checked]:border-blue-500 hover:border-blue-600 hover:bg-slate-900 [&:has([data-state=checked])]:border-blue-500"
         >
           <FaSteam className="mb-1 h-5 w-5 text-blue-500" />
           <span className="text-sm">Steam Version</span>
@@ -38,7 +38,7 @@ export const VersionStep = ({
         <RadioGroupItem value="other" id="other" className="peer sr-only" />
         <Label
           htmlFor="other"
-          className="flex cursor-pointer flex-col items-center justify-between rounded-md border-2 border-slate-800 bg-slate-900/50 p-3 hover:border-blue-600 hover:bg-slate-900 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500"
+          className="flex cursor-pointer flex-col items-center justify-between rounded-md border-2 border-slate-800 bg-slate-900/50 p-3 peer-data-[state=checked]:border-blue-500 hover:border-blue-600 hover:bg-slate-900 [&:has([data-state=checked])]:border-blue-500"
         >
           <Folder className="mb-1 h-5 w-5 text-blue-500" />
           <span className="text-sm">Other Version</span>

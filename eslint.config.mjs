@@ -26,6 +26,7 @@ export default tseslint.config(
   {
     ignores: [
       'src-tauri/**/*',
+      'dist/**/*',
       'src/bindings.ts',
       'postcss.config.js',
       'tailwind.config.js',

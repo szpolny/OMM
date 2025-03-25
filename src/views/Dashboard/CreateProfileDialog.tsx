@@ -50,7 +50,7 @@ export default function CreateProfileDialog() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 text-muted-foreground hover:text-white"
+                className="text-muted-foreground h-7 w-7 hover:text-white"
               >
                 <Plus className="h-4 w-4" />
               </Button>
@@ -80,7 +80,7 @@ export default function CreateProfileDialog() {
                   onChange={(e) => setProfileName(e.target.value)}
                   required
                 />
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {profileName
                     ? `Profile will be created at: ${mainDirectory}\\${profileName}`
                     : `Profile will be created at: ${mainDirectory}\\[Profile Name]`}

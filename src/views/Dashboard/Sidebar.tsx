@@ -44,7 +44,7 @@ const Sidebar = () => {
       </div>
       <div>
         <div className="flex h-10 w-full items-center justify-between px-2">
-          <h2 className="text-sm font-semibold text-muted-foreground">
+          <h2 className="text-muted-foreground text-sm font-semibold">
             PROFILES
           </h2>
           <CreateProfileDialog onCreateProfile={handleCreateProfile} />

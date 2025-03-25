@@ -45,7 +45,7 @@ export const SteamApiStep = ({
           <RadioGroupItem value="yes" id="api-yes" className="peer sr-only" />
           <Label
             htmlFor="api-yes"
-            className="flex cursor-pointer items-center justify-center rounded-md border-2 border-slate-800 bg-slate-900/50 p-2 hover:border-blue-600 hover:bg-slate-900 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500"
+            className="flex cursor-pointer items-center justify-center rounded-md border-2 border-slate-800 bg-slate-900/50 p-2 peer-data-[state=checked]:border-blue-500 hover:border-blue-600 hover:bg-slate-900 [&:has([data-state=checked])]:border-blue-500"
           >
             <span className="text-sm text-white">
               Yes, enable Steam features
@@ -56,7 +56,7 @@ export const SteamApiStep = ({
           <RadioGroupItem value="no" id="api-no" className="peer sr-only" />
           <Label
             htmlFor="api-no"
-            className="flex cursor-pointer items-center justify-center rounded-md border-2 border-slate-800 bg-slate-900/50 p-2 hover:border-blue-600 hover:bg-slate-900 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500"
+            className="flex cursor-pointer items-center justify-center rounded-md border-2 border-slate-800 bg-slate-900/50 p-2 peer-data-[state=checked]:border-blue-500 hover:border-blue-600 hover:bg-slate-900 [&:has([data-state=checked])]:border-blue-500"
           >
             <span className="text-sm text-white">No, skip Steam features</span>
           </Label>

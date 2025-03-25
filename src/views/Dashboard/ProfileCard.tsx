@@ -23,7 +23,7 @@ const ProfileCard = (props: {
     >
       {props.name}
       {props.locked ? (
-        <Lock size={8} className="h-2 w-2 text-muted-foreground" />
+        <Lock size={8} className="text-muted-foreground h-2 w-2" />
       ) : (
         <TooltipProvider>
           <Tooltip>
